@@ -1,0 +1,24 @@
+name: Run Automated Commits
+on: [workflow_dispatch]
+
+jobs:
+  commit-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          # This tells GitHub to use full permissions for the checkout tool
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run the loop
+        run: |
+          git config --global user.name "Your GitHub Username"
+          git config --global user.email "your-email@example.com"
+          
+          for i in {1..45}; do
+            git commit --allow-empty -m "Automated commit $i"
+          done
+          
+          # This uses the built-in token to force the push past security blocks
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
