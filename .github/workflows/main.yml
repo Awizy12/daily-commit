@@ -1,0 +1,22 @@
+name: Run Automated Commits
+on: [workflow_dispatch]
+
+jobs:
+  commit-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Run the loop
+        run: |
+          git config --global user.name "Your GitHub Username"
+          git config --global user.email "your-email@example.com"
+          
+          # Your edited loop runs here:
+          for i in {1..45}; do
+            git commit --allow-empty -m "Automated commit $i"
+          done
+          
+          # This pushes the 45 commits to your repository:
+          git push
